@@ -45,7 +45,7 @@ def main():
         # Jouw hand, stack, big blind en andere spelers
         hand = st.text_input("Voer je eigen hand in (bijv. AA, AK, 77, QJ):").upper()
         mijn_stack = st.number_input("Voer je eigen stack in chips in:", min_value=0, value=0)
-        big_blind = st.number_input("Voer de huidige big blind in:", min_value=1, value=0)
+        big_blind = st.number_input("Voer de huidige big blind in:", min_value=1, value=1)
 
         # Stacks van spelers vóór jou
         stacks_voor_mij_input = st.text_input("Voer de stacks van spelers voor jou die hebben ingezet (gescheiden door spaties):")
