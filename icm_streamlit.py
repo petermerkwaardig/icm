@@ -16,26 +16,43 @@ def icm_calculate(total_stacks, payouts):
     
     return winnings
 
-# Functie voor push/fold-beslissing op basis van hand
-def push_fold_decision(hand, stack_in_bb):
+# Functie voor push/fold-beslissing op basis van hand en stack
+def push_fold_decision(hand, stack_in_bb, total_stacks):
     # Handcategorie bepalen (vereenvoudigd)
     premium_hands = ['AA', 'KK', 'QQ', 'AK', 'AQ']
     strong_hands = ['JJ', 'TT', '99', '88', 'AQ', 'KQ']
     marginal_hands = ['77', '66', '55', 'A10', 'KJ', 'QJ']
     
-    # Push/fold-beslissing
-    if hand in premium_hands:
-        return "Push", "Je hebt een premium hand, push!"
-    elif hand in strong_hands and stack_in_bb <= 15:
-        return "Push", "Je hebt een sterke hand, en een stack onder 15 BB, push!"
-    elif hand in marginal_hands and stack_in_bb <= 10:
-        return "Push", "Je hebt een marginale hand, maar je stack is klein, push!"
+    # Gemiddelde stack bepalen voor ICM-druk
+    gemiddelde_stack = sum(total_stacks) / len(total_stacks)
+    
+    # ICM-druk verhogen bij kleinere stacks
+    if stack_in_bb < gemiddelde_stack * 0.5:
+        icm_pressure = "high"
+    elif stack_in_bb < gemiddelde_stack:
+        icm_pressure = "medium"
     else:
-        return "Fold", "Je hebt een zwakkere hand of een grote stack, fold."
+        icm_pressure = "low"
+    
+    # Beslissing maken op basis van de ICM-druk
+    if hand in premium_hands:
+        return "Push", f"Je hebt een premium hand en ICM-druk is {icm_pressure}, push!"
+    elif hand in strong_hands:
+        if icm_pressure == "high":
+            return "Push", "Je hebt een sterke hand en je hebt een kleine stack, push!"
+        else:
+            return "Fold", "Je hebt een sterke hand, maar geen hoge ICM-druk, fold is beter."
+    elif hand in marginal_hands:
+        if icm_pressure == "high" or stack_in_bb <= 10:
+            return "Push", "Je hebt een marginale hand, maar je stack is klein en ICM-druk is hoog, push!"
+        else:
+            return "Fold", "Je hebt een marginale hand, fold is veiliger."
+    else:
+        return "Fold", "Je hebt een zwakke hand, fold!"
 
 # Streamlit applicatie
 def main():
-    st.title("ICM Berekening en Push/Fold Beslissing")
+    st.title("ICM Berekening en Push/Fold Beslissing met ICM-druk")
 
     # Vraag de prijzengeldverdeling eenmalig aan het begin
     payouts_input = st.text_input("Voer de prijzengeldverdeling in (bijv. 100 60 40):")
@@ -72,7 +89,7 @@ def main():
                     st.write(f"Stack: {total_stacks[i]} chips | ICM waarde = {value:.2f}")
                 
                 # Push/Fold-beslissing op basis van je hand en je eigen stackgrootte
-                beslissing, advies = push_fold_decision(hand, mijn_stack_in_bb)
+                beslissing, advies = push_fold_decision(hand, mijn_stack_in_bb, total_stacks)
                 st.subheader("Push/Fold-beslissing")
                 st.write(f"Beslissing: {beslissing}")
                 st.write(f"Advies: {advies}")
