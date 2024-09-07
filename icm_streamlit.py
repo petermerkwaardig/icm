@@ -1,5 +1,4 @@
 import streamlit as st
-streamlit config show
 
 # Functie voor het berekenen van ICM
 def icm_calculate(total_stacks, payouts):
