@@ -80,19 +80,19 @@ def main():
             mijn_stack_in_bb = mijn_stack / big_blind
 
             # Bereken ICM-waarden
-            if st.button("Bereken ICM en Beslissing"):
+            if st.button("Bereken"):
                 icm_values = icm_calculate(total_stacks, payouts)
 
                 # Resultaten tonen
-                st.subheader("ICM Berekeningen")
+                st.subheader("ICM")
                 for i, value in enumerate(icm_values):
-                    st.write(f"Stack: {total_stacks[i]} chips | ICM waarde = {value:.2f}")
+                    st.write(f"Stack: {total_stacks[i]} chips | ICM = {value:.2f}")
                 
                 # Push/Fold-beslissing op basis van je hand en je eigen stackgrootte
                 beslissing, advies = push_fold_decision(hand, mijn_stack_in_bb, total_stacks)
-                st.subheader("Push/Fold-beslissing")
-                st.write(f"Beslissing: {beslissing}")
-                st.write(f"Advies: {advies}")
+                st.subheader("Push/Fold")
+                st.write(f"analyse {beslissing}")
+                st.write(f"advies:{advies}")
 
 # Start de Streamlit applicatie
 if __name__ == "__main__":
