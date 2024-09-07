@@ -16,43 +16,39 @@ def icm_calculate(total_stacks, payouts):
     
     return winnings
 
-# Functie voor push/fold-beslissing op basis van hand en stack
-def push_fold_decision(hand, stack_in_bb, total_stacks):
-    # Handcategorie bepalen (vereenvoudigd)
-    premium_hands = ['AA', 'KK', 'QQ', 'AK', 'AQ']
-    strong_hands = ['JJ', 'TT', '99', '88', 'AQ', 'KQ']
-    marginal_hands = ['77', '66', '55', 'A10', 'KJ', 'QJ']
-    
-    # Gemiddelde stack bepalen voor ICM-druk
-    gemiddelde_stack = sum(total_stacks) / len(total_stacks)
-    
-    # ICM-druk verhogen bij kleinere stacks
-    if stack_in_bb < gemiddelde_stack * 0.5:
-        icm_pressure = "high"
-    elif stack_in_bb < gemiddelde_stack:
-        icm_pressure = "medium"
-    else:
-        icm_pressure = "low"
-    
-    # Beslissing maken op basis van de ICM-druk
-    if hand in premium_hands:
-        return "Push", f"Je hebt een premium hand en ICM-druk is {icm_pressure}, push!"
-    elif hand in strong_hands:
-        if icm_pressure == "high":
-            return "Push", "Je hebt een sterke hand en je hebt een kleine stack, push!"
+# Functie voor push/fold-beslissing op basis van Nash ranges
+def nash_push_fold(stack_in_bb, hand):
+    # Nash push ranges op basis van stackgrootte in big blinds
+    if stack_in_bb <= 5:
+        return "Push", "Je hebt minder dan 5 BB, push elke hand!"
+    elif stack_in_bb <= 10:
+        nash_range = ['22+', 'K9+', 'QJ', 'A2+']
+        if hand in nash_range:
+            return "Push", f"Hand {hand} valt binnen de Nash push range bij 6-10 BB, push!"
         else:
-            return "Fold", "Je hebt een sterke hand, maar geen hoge ICM-druk, fold is beter."
-    elif hand in marginal_hands:
-        if icm_pressure == "high" or stack_in_bb <= 10:
-            return "Push", "Je hebt een marginale hand, maar je stack is klein en ICM-druk is hoog, push!"
+            return "Fold", f"Hand {hand} valt buiten de Nash push range bij 6-10 BB, fold!"
+    elif stack_in_bb <= 15:
+        nash_range = ['55+', 'A7+', 'KQ', 'KJ']
+        if hand in nash_range:
+            return "Push", f"Hand {hand} valt binnen de Nash push range bij 11-15 BB, push!"
         else:
-            return "Fold", "Je hebt een marginale hand, fold is veiliger."
+            return "Fold", f"Hand {hand} valt buiten de Nash push range bij 11-15 BB, fold!"
+    elif stack_in_bb <= 20:
+        nash_range = ['88+', 'AQ+', 'KJ']
+        if hand in nash_range:
+            return "Push", f"Hand {hand} valt binnen de Nash push range bij 16-20 BB, push!"
+        else:
+            return "Fold", f"Hand {hand} valt buiten de Nash push range bij 16-20 BB, fold!"
     else:
-        return "Fold", "Je hebt een zwakke hand, fold!"
+        nash_range = ['99+', 'AK']
+        if hand in nash_range:
+            return "Push", f"Hand {hand} valt binnen de Nash push range bij >20 BB, push!"
+        else:
+            return "Fold", f"Hand {hand} valt buiten de Nash push range bij >20 BB, fold!"
 
 # Streamlit applicatie
 def main():
-    st.title("ICM Berekening en Push/Fold Beslissing met ICM-druk")
+    st.title("ICM Berekening en Nash Push/Fold Beslissing")
 
     # Vraag de prijzengeldverdeling eenmalig aan het begin
     payouts_input = st.text_input("Voer de prijzengeldverdeling in (bijv. 100 60 40):")
@@ -80,7 +76,7 @@ def main():
             mijn_stack_in_bb = mijn_stack / big_blind
 
             # Bereken ICM-waarden
-            if st.button("Bereken ICM en Beslissing"):
+            if st.button("Bereken ICM en Nash Push/Fold Beslissing"):
                 icm_values = icm_calculate(total_stacks, payouts)
 
                 # Resultaten tonen
@@ -88,9 +84,9 @@ def main():
                 for i, value in enumerate(icm_values):
                     st.write(f"Stack: {total_stacks[i]} chips | ICM waarde = {value:.2f}")
                 
-                # Push/Fold-beslissing op basis van je hand en je eigen stackgrootte
-                beslissing, advies = push_fold_decision(hand, mijn_stack_in_bb, total_stacks)
-                st.subheader("Push/Fold-beslissing")
+                # Nash push/fold-beslissing op basis van je hand en je eigen stackgrootte
+                beslissing, advies = nash_push_fold(mijn_stack_in_bb, hand)
+                st.subheader("Nash Push/Fold-beslissing")
                 st.write(f"Beslissing: {beslissing}")
                 st.write(f"Advies: {advies}")
 
