@@ -86,7 +86,7 @@ def main():
                 # Resultaten tonen
                 st.subheader("ICM")
                 for i, value in enumerate(icm_values):
-                    st.write(f"Stack {total_stacks[i]} ICM {value:.2f}")
+                    st.write(f"Stack" {total_stacks[i]} ICM {value:.2f}")
                 
                 # Push/Fold-beslissing op basis van je hand en je eigen stackgrootte
                 beslissing, advies = push_fold_decision(hand, mijn_stack_in_bb, total_stacks)
