@@ -36,36 +36,36 @@ def push_fold_decision(hand, stack_in_bb, total_stacks):
     
     # Beslissing maken op basis van de ICM-druk
     if hand in premium_hands:
-        return "Push", f"premium hand, ICM-pressure {icm_pressure}: push!"
+        return "Push", f"premium hand, ICM-pressure {icm_pressure}: PUSH!"
     elif hand in strong_hands:
         if icm_pressure == "high":
-            return "Push", "strong hand, small stack: push!"
+            return "Push", "strong hand, small stack: PUSH!"
         else:
             return "Fold", "strong hand, low ICM-pressure low: fold."
     elif hand in marginal_hands:
         if icm_pressure == "high" or stack_in_bb <= 10:
-            return "Push", "marginal hand, small stack, high ICM-pressure: push!"
+            return "Push", "marginal hand, small stack, high ICM-pressure: PUSH!"
         else:
             return "Fold", "marginal hand: fold."
     else:
-        return "Fold", "weak hand: fold!"
+        return "Fold", "weak hand: fold."
 
 # Streamlit applicatie
 def main():
-    st.title("ICM Push/Fold")
+    st.title("Push/Fold")
 
     # Vraag de prijzengeldverdeling eenmalig aan het begin
-    payouts_input = st.text_input("prijzengeld")
+    payouts_input = st.text_input("Prijzengeld")
     if payouts_input:
         payouts = list(map(int, payouts_input.split()))
 
         # Jouw hand, stack, big blind en andere spelers
-        hand = st.text_input("je hand").upper()
-        mijn_stack = st.number_input("je stack", min_value=0, value=0)
-        big_blind = st.number_input("de big blind", min_value=1, value=1)
+        hand = st.text_input("Je hand").upper()
+        mijn_stack = st.number_input("Je stack", min_value=0, value=0)
+        big_blind = st.number_input("Big blind", min_value=1, value=1)
 
         # Stacks van spelers vóór jou
-        stacks_voor_mij_input = st.text_input("stacks in de pot")
+        stacks_voor_mij_input = st.text_input("Stacks in pot")
         stacks_voor_mij = list(map(int, stacks_voor_mij_input.split())) if stacks_voor_mij_input else []
 
         # Stacks van spelers achter jou
@@ -86,13 +86,13 @@ def main():
                 # Resultaten tonen
                 st.subheader("ICM")
                 for i, value in enumerate(icm_values):
-                    st.write(f"Stack: {total_stacks[i]} chips | ICM = {value:.2f}")
+                    st.write(f"Stack {total_stacks[i]} ICM {value:.2f}")
                 
                 # Push/Fold-beslissing op basis van je hand en je eigen stackgrootte
                 beslissing, advies = push_fold_decision(hand, mijn_stack_in_bb, total_stacks)
                 st.subheader("Push/Fold")
-                st.write(f"analyse {beslissing}")
-                st.write(f"advies:{advies}")
+                st.write(f"{Advies}")st.write(f"{Beslissing}")
+                
 
 # Start de Streamlit applicatie
 if __name__ == "__main__":
