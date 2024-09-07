@@ -19,29 +19,29 @@ def icm_calculate(total_stacks, payouts):
 # Functie voor push/fold-beslissing op basis van hand en stack
 def push_fold_decision(hand, stack_in_bb, total_stacks):
     # Handcategorie bepalen (vereenvoudigd)
-    premium_hands = ['AA', 'KK', 'QQ', 'AK', 'AQ']
-    strong_hands = ['JJ', 'TT', '99', '88', 'AQ', 'KQ']
-    marginal_hands = ['77', '66', '55', 'A10', 'KJ', 'QJ']
+    Premium_hands = ['AA', 'KK', 'QQ', 'AK', 'AQ']
+    Strong_hands = ['JJ', 'TT', '99', '88', 'AQ', 'KQ']
+    Marginal_hands = ['77', '66', '55', 'A10', 'KJ', 'QJ']
     
     # Gemiddelde stack bepalen voor ICM-druk
     gemiddelde_stack = sum(total_stacks) / len(total_stacks)
     
     # ICM-druk verhogen bij kleinere stacks
     if stack_in_bb < gemiddelde_stack * 0.5:
-        icm_pressure = "high"
+        icm_pressure = "High"
     elif stack_in_bb < gemiddelde_stack:
-        icm_pressure = "medium"
+        icm_pressure = "Medium"
     else:
-        icm_pressure = "low"
+        icm_pressure = "Low"
     
     # Beslissing maken op basis van de ICM-druk
     if hand in premium_hands:
-        return "Push", f"premium hand, ICM-pressure {icm_pressure}: PUSH!"
+        return "Push", f"premium hand, ICM-pressure {icm_pressure}"
     elif hand in strong_hands:
         if icm_pressure == "high":
-            return "Push", "strong hand, small stack: PUSH!"
+            return "PUSH", "strong hand, small stack."
         else:
-            return "Fold", "strong hand, low ICM-pressure low: fold."
+            return "Fold", "strong hand, low ICM-pressure low"
     elif hand in marginal_hands:
         if icm_pressure == "high" or stack_in_bb <= 10:
             return "Push", "marginal hand, small stack, high ICM-pressure: PUSH!"
