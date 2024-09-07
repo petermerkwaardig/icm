@@ -19,9 +19,9 @@ def icm_calculate(total_stacks, payouts):
 # Functie voor push/fold-beslissing op basis van hand en stack
 def push_fold_decision(hand, stack_in_bb, total_stacks):
     # Handcategorie bepalen (vereenvoudigd)
-    Premium_hands = ['AA', 'KK', 'QQ', 'AK', 'AQ']
-    Strong_hands = ['JJ', 'TT', '99', '88', 'AQ', 'KQ']
-    Marginal_hands = ['77', '66', '55', 'A10', 'KJ', 'QJ']
+    premium_hands = ['AA', 'KK', 'QQ', 'AK', 'AQ']
+    strong_hands = ['JJ', 'TT', '99', '88', 'AQ', 'KQ']
+    marginal_hands = ['77', '66', '55', 'A10', 'KJ', 'QJ']
     
     # Gemiddelde stack bepalen voor ICM-druk
     gemiddelde_stack = sum(total_stacks) / len(total_stacks)
@@ -86,7 +86,7 @@ def main():
                 # Resultaten tonen
                 st.subheader("ICM")
                 for i, value in enumerate(icm_values):
-                    st.write(f"Stack {total_stacks[i]}|{value:.2f}")
+                    st.write(f"Stack {total_stacks[i]} | ICM {value:.2f}")
                 
                 # Push/Fold-beslissing op basis van je hand en je eigen stackgrootte
                 beslissing, advies = push_fold_decision(hand, mijn_stack_in_bb, total_stacks)
