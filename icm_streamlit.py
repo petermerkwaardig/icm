@@ -36,40 +36,40 @@ def push_fold_decision(hand, stack_in_bb, total_stacks):
     
     # Beslissing maken op basis van de ICM-druk
     if hand in premium_hands:
-        return "Push", f"Je hebt een premium hand en ICM-druk is {icm_pressure}, push!"
+        return "Push", f"premium hand, ICM-pressure {icm_pressure}: push!"
     elif hand in strong_hands:
         if icm_pressure == "high":
-            return "Push", "Je hebt een sterke hand en je hebt een kleine stack, push!"
+            return "Push", "strong hand, small stack: push!"
         else:
-            return "Fold", "Je hebt een sterke hand, maar geen hoge ICM-druk, fold is beter."
+            return "Fold", "strong hand, low ICM-pressure low: fold."
     elif hand in marginal_hands:
         if icm_pressure == "high" or stack_in_bb <= 10:
-            return "Push", "Je hebt een marginale hand, maar je stack is klein en ICM-druk is hoog, push!"
+            return "Push", "marginal hand, small stack, high ICM-pressure: push!"
         else:
-            return "Fold", "Je hebt een marginale hand, fold is veiliger."
+            return "Fold", "marginal hand: fold."
     else:
-        return "Fold", "Je hebt een zwakke hand, fold!"
+        return "Fold", "weak hand: fold!"
 
 # Streamlit applicatie
 def main():
     st.title("ICM Berekening en Push/Fold Beslissing met ICM-druk")
 
     # Vraag de prijzengeldverdeling eenmalig aan het begin
-    payouts_input = st.text_input("Voer de prijzengeldverdeling in (bijv. 100 60 40):")
+    payouts_input = st.text_input("prijzengeld")
     if payouts_input:
         payouts = list(map(int, payouts_input.split()))
 
         # Jouw hand, stack, big blind en andere spelers
-        hand = st.text_input("Voer je eigen hand in (bijv. AA, AK, 77, QJ):").upper()
-        mijn_stack = st.number_input("Voer je eigen stack in chips in:", min_value=0, value=0)
-        big_blind = st.number_input("Voer de huidige big blind in:", min_value=1, value=1)
+        hand = st.text_input("je hand").upper()
+        mijn_stack = st.number_input("je stack", min_value=0, value=0)
+        big_blind = st.number_input("de big blind", min_value=1, value=1)
 
         # Stacks van spelers vóór jou
-        stacks_voor_mij_input = st.text_input("Voer de stacks van spelers voor jou die hebben ingezet (gescheiden door spaties):")
+        stacks_voor_mij_input = st.text_input("stacks in de pot")
         stacks_voor_mij = list(map(int, stacks_voor_mij_input.split())) if stacks_voor_mij_input else []
 
         # Stacks van spelers achter jou
-        stacks_achter_mij_input = st.text_input("Voer de stacks van spelers achter jou die nog kunnen inzetten (gescheiden door spaties):")
+        stacks_achter_mij_input = st.text_input("stacks achter jou")
         stacks_achter_mij = list(map(int, stacks_achter_mij_input.split())) if stacks_achter_mij_input else []
 
         # Voeg jouw stack, de stacks voor je en achter je samen
