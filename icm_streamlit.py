@@ -28,9 +28,9 @@ def push_fold_decision(hand, stack_in_bb, total_stacks):
     
     # ICM-druk verhogen bij kleinere stacks
     if stack_in_bb < gemiddelde_stack * 0.5:
-        icm_pressure = "high"
+        icm_pressure = "High"
     elif stack_in_bb < gemiddelde_stack:
-        icm_pressure = "medium"
+        icm_pressure = "Medium"
     else:
         icm_pressure = "low"
     
