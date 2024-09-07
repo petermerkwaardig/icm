@@ -91,7 +91,8 @@ def main():
                 # Push/Fold-beslissing op basis van je hand en je eigen stackgrootte
                 beslissing, advies = push_fold_decision(hand, mijn_stack_in_bb, total_stacks)
                 st.subheader("Push/Fold")
-                st.write(f"{Advies}")st.write(f"{Beslissing}")
+                st.write(f"{Advies}")
+                st.write(f"{Beslissing}")
                 
 
 # Start de Streamlit applicatie
