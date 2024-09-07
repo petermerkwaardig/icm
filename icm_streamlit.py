@@ -48,7 +48,7 @@ def push_fold_decision(hand, stack_in_bb, total_stacks):
         else:
             return "Fold", "marginal hand: fold."
     else:
-        return "Fold", "weak hand: fold."
+        return "FOLD", "Weak hand."
 
 # Streamlit applicatie
 def main():
