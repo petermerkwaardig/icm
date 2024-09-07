@@ -36,15 +36,15 @@ def push_fold_decision(hand, stack_in_bb, total_stacks):
     
     # Beslissing maken op basis van de ICM-druk
     if hand in premium_hands:
-        return "PUSH", f"Premium hand. {icm_pressure} ICM-pressure"
+        return "PUSH", f"Premium hand. {icm_pressure} pressure"
     elif hand in strong_hands:
         if icm_pressure == "High":
             return "PUSH", "Strong hand. Small stack."
         else:
-            return "FOLD", "Strong hand. Low ICM-pressure."
+            return "FOLD", "Strong hand. Low pressure."
     elif hand in marginal_hands:
         if icm_pressure == "High" or stack_in_bb <= 10:
-            return "PUSH", "Marginal hand. Small stack. Low ICM-pressure."
+            return "PUSH", "Marginal hand. Small stack. Low Pressure."
         else:
             return "FOLD", "Marginal hand."
     else:
