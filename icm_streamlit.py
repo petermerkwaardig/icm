@@ -36,19 +36,19 @@ def push_fold_decision(hand, stack_in_bb, total_stacks):
     
     # Beslissing maken op basis van de ICM-druk
     if hand in premium_hands:
-        return "PUSH", f"Premium hand. {icm_pressure} pressure."
+        return "PUSH!", f"Premium hand. {icm_pressure} pressure."
     elif hand in strong_hands:
         if icm_pressure == "High":
-            return "PUSH", "Strong hand. Small stack."
+            return "PUSH!", "Strong hand. Small stack."
         else:
-            return "FOLD", "Strong hand. Low pressure."
+            return "FOLD!", "Strong hand. Low pressure."
     elif hand in marginal_hands:
         if icm_pressure == "High" or stack_in_bb <= 10:
-            return "PUSH", "Marginal hand. Small stack. Low Pressure."
+            return "PUSH!", "Marginal hand. Small stack. Low Pressure."
         else:
-            return "FOLD", "Marginal hand."
+            return "FOLD!", "Marginal hand."
     else:
-        return "FOLD", "Weak hand."
+        return "FOLD!", "Weak hand."
 
 # Streamlit applicatie
 def main():
@@ -69,7 +69,7 @@ def main():
         stacks_voor_mij = list(map(int, stacks_voor_mij_input.split())) if stacks_voor_mij_input else []
 
         # Stacks van spelers achter jou
-        stacks_achter_mij_input = st.text_input("stacks achter jou")
+        stacks_achter_mij_input = st.text_input("Stacks achter jou")
         stacks_achter_mij = list(map(int, stacks_achter_mij_input.split())) if stacks_achter_mij_input else []
 
         # Voeg jouw stack, de stacks voor je en achter je samen
