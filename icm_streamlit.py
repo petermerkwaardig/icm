@@ -52,7 +52,7 @@ def push_fold_decision(hand, stack_in_bb, total_stacks):
 
 # Streamlit applicatie
 def main():
-    st.title("ICM Berekening en Push/Fold Beslissing met ICM-druk")
+    st.title("ICM Push/Fold")
 
     # Vraag de prijzengeldverdeling eenmalig aan het begin
     payouts_input = st.text_input("prijzengeld")
