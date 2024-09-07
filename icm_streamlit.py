@@ -32,18 +32,18 @@ def push_fold_decision(hand, stack_in_bb, total_stacks):
     elif stack_in_bb < gemiddelde_stack:
         icm_pressure = "Medium"
     else:
-        icm_pressure = "low"
+        icm_pressure = "Low"
     
     # Beslissing maken op basis van de ICM-druk
     if hand in premium_hands:
-        return "PUSH", f"Premium hand. {icm_pressure}ICM-pressure"
+        return "PUSH", f"Premium hand. {icm_pressure} ICM-pressure"
     elif hand in strong_hands:
-        if icm_pressure == "high":
+        if icm_pressure == "High":
             return "PUSH", "Strong hand. Small stack."
         else:
             return "FOLD", "Strong hand. Low ICM-pressure."
     elif hand in marginal_hands:
-        if icm_pressure == "high" or stack_in_bb <= 10:
+        if icm_pressure == "High" or stack_in_bb <= 10:
             return "PUSH", "Marginal hand. Small stack. Low ICM-pressure."
         else:
             return "FOLD", "Marginal hand."
@@ -84,13 +84,13 @@ def main():
                 icm_values = icm_calculate(total_stacks, payouts)
 
                 # Resultaten tonen
-                st.subheader("ICM")
+                st.subheader("Pressure")
                 for i, value in enumerate(icm_values):
                     st.write(f"Stack {total_stacks[i]} | ICM {value:.2f}")
                 
                 # Push/Fold-beslissing op basis van je hand en je eigen stackgrootte
                 beslissing, advies = push_fold_decision(hand, mijn_stack_in_bb, total_stacks)
-                st.subheader("Push/Fold")
+                st.subheader("Action")
                 st.write(f"{advies}")
                 st.write(f"{beslissing}")
                 
