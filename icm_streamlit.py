@@ -44,11 +44,11 @@ def push_fold_decision(hand, stack_in_bb, total_stacks):
             return "Fold", "strong hand, low ICM-pressure low"
     elif hand in marginal_hands:
         if icm_pressure == "high" or stack_in_bb <= 10:
-            return "Push", "marginal hand, small stack, high ICM-pressure: PUSH!"
+            return "PUSH", "marginal hand, small stack, high ICM-pressure: PUSH!"
         else:
-            return "Fold", "marginal hand: fold."
+            return "FOLD", "Marginal hand."
     else:
-        return "FOLD", "Weak hand."
+        return "FOLD", "(weak hand)"
 
 # Streamlit applicatie
 def main():
